@@ -1,0 +1,28 @@
+publish_mode: editorial_workflow
+backend:
+  name: github
+  repo: gorilych/blog
+  branch: master
+  base_url: https://3sljmhn0il.execute-api.us-east-1.amazonaws.com
+  auth_endpoint: /prod/auth
+
+site_url: https://blog.gorilych.ru
+
+slug:
+  encoding: "ascii"
+  clean_accents: true
+  sanitize_replacement: "_"
+
+media_folder: media
+
+collections:
+- name: post
+  label: Post
+  folder: posts
+  create: true
+  delete: true
+  slug: "{{year}}-{{month}}-{{day}}_{{slug}}"
+  fields:
+  - {name: title, label: Title}
+  - {name: body, label: Body, widget: markdown}
+
