@@ -160,6 +160,7 @@ exclude:
   - assets/js/vendor
   - Capfile
   - CHANGELOG
+  - CNAME
   - config
   - Gemfile
   - Gruntfile.js
@@ -221,6 +222,7 @@ plugins:
   - jekyll-gist
   - jekyll-feed
   - jekyll-include-cache
+  - jekyll-remote-theme
 
 # mimic GitHub Pages with --safe
 whitelist:
@@ -281,3 +283,10 @@ defaults:
       comments: # true
       share: true
       related: true
+  # _pages
+  - scope:
+      path: ""
+      type: pages
+    values:
+      layout: single
+      author_profile: true
