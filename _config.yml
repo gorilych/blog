@@ -22,6 +22,7 @@ subtitle                 : # site tagline that appears below site title in masth
 name                     : "Andrey Kartashov"
 email                    : gorilych@gmail.com
 github_username          : gorilych
+linkedin_username        : amkartashov
 description              : ""
 url                      : "https://blog.gorilych.ru" # the base hostname & protocol for your site e.g. "https://mmistakes.github.io"
 baseurl                  : # the subpath of your site, e.g. "/blog"
@@ -98,7 +99,7 @@ author:
   name             : "Andrey Kartashov"
   avatar           : # path of avatar image, e.g. "/assets/images/bio-photo.jpg"
   bio              : ""
-  location         : ""
+  #location         : "Koltsovo, Novosibirsk region, Russia"
   email            : "gorilych@gmail.com"
   links:
     - label: "Email"
@@ -115,7 +116,10 @@ author:
       # url: "https://facebook.com/"
     - label: "GitHub"
       icon: "fab fa-fw fa-github"
-      # url: "https://github.com/"
+      url: "https://github.com/gorilych"
+    - label: "LinkedIn"
+      icon: "fab fa-fw fa-linkedin"
+      url: "https://www.linkedin.com/in/amkartashov/"
     - label: "Instagram"
       icon: "fab fa-fw fa-instagram"
       # url: "https://instagram.com/"
@@ -131,7 +135,10 @@ footer:
       # url:
     - label: "GitHub"
       icon: "fab fa-fw fa-github"
-      # url:
+      url: "https://github.com/gorilych"
+    - label: "LinkedIn"
+      icon: "fab fa-fw fa-linkedin"
+      url: "https://www.linkedin.com/in/amkartashov/"
     - label: "GitLab"
       icon: "fab fa-fw fa-gitlab"
       # url:
