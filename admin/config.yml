@@ -1,0 +1,50 @@
+publish_mode: editorial_workflow
+backend:
+  name: github
+  repo: gorilych/blog
+  branch: gh-pages
+  base_url: https://3sljmhn0il.execute-api.us-east-1.amazonaws.com
+  auth_endpoint: /prod/auth
+
+site_url: https://blog.gorilych.ru
+
+slug:
+  encoding: "ascii"
+  clean_accents: true
+  sanitize_replacement: "_"
+
+media_folder: 'assets/uploads'
+
+collections:
+- name: 'posts'
+  label: 'Posts'
+  label_singular: 'Post'
+  folder: '_posts/'
+  extension: 'markdown'
+  format: 'frontmatter'
+  sort: "date:desc"
+  create: true
+  delete: true
+  slug: '{{year}}-{{month}}-{{day}}-{{slug}}'
+  summary: '{{date}} {{title}}'
+  editor:
+    preview: false
+  fields:
+    - { label: 'Title', name: 'title', widget: 'string' }
+    - label: 'Publish Date'
+      name: 'date'
+      widget: 'datetime'
+      format: "YYYY-MM-DD HH:mm:ss Z" # e.g. 2021-12-24 00:52:28 +0700
+    - { label: 'Body', name: 'body', widget: 'markdown' }
+    - { label: 'Categories', name: 'categories', widget: "string", required: false }
+- name: 'pages'
+  label: 'Pages'
+  folder: '_pages/'
+  summary: '{{filename}}'
+  editor:
+    preview: false
+  fields:
+    - { label: 'Title', name: 'title', widget: 'string' }
+    - { label: 'Layout', name: 'layout', widget: 'string', default: 'single', required: false }
+    - { label: 'Permalink', name: 'permalink', widget: 'string', required: false }
+    - { label: 'Body', name: 'body', widget: 'markdown' }
