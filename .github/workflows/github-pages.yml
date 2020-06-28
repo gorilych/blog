@@ -1,0 +1,64 @@
+name: Build and deploy Jekyll site to GitHub Pages
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  github-pages:
+    runs-on: ubuntu-18.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          path: current_branch
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          ref: gh-pages
+          path: target_branch
+          ssh-key: ${{ secrets.DEPLOY_KEY }}
+      - name: Install bundler
+        run: sudo gem install bundler
+      - name: Set up gems cache in GitHub Actions
+        uses: actions/cache@v2
+        with:
+          path: _gems
+          key: gem-${{ hashFiles('Gemfile.lock') }}
+          restore-keys: |
+            gem-
+      - name: Install gems
+        working-directory: current_branch
+        run: |
+          # set gems path so it can be cached later
+          bundle config path ${GITHUB_WORKSPACE}/_gems
+          # install gems
+          bundle install
+      - name: Build site pages
+        working-directory: current_branch
+        run: bundle exec jekyll build --incremental --verbose
+      - name: Configure git
+        working-directory: target_branch
+        run: |
+          git config user.name "${GITHUB_ACTOR}"
+          git config user.email "${GITHUB_ACTOR}@users.noreply.github.com"
+      - name: Clean up target repo
+        working-directory: target_branch
+        run: |
+          # remove all files except for CNAME and .nojekyll
+          git rm -rf .
+          git checkout HEAD -- CNAME .nojekyll
+      - name: Copy changes
+        run: cp -av current_branch/_site/. target_branch/
+      - name: Commit changes
+        working-directory: target_branch
+        run: |
+          git add -A
+          # git-commit exits with error if there are no changes
+          if ! git diff-index --no-ext-diff --quiet HEAD --; then
+            git commit -m "jekyll build from Action ${GITHUB_SHA}"
+          fi
+      - name: Push changes
+        working-directory: target_branch
+        run: git push
