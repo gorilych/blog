@@ -38,6 +38,9 @@ jobs:
       - name: Build site pages
         working-directory: current_branch
         run: bundle exec jekyll build --incremental --verbose
+      - name: Get commit message
+        working-directory: current_branch
+        run: git show --no-patch --format=%B > ../commit_message
       - name: Configure git
         working-directory: target_branch
         run: |
@@ -57,7 +60,7 @@ jobs:
           git add -A
           # git-commit exits with error if there are no changes
           if ! git diff-index --no-ext-diff --quiet HEAD --; then
-            git commit -m "jekyll build from Action ${GITHUB_SHA}"
+            git commit -F ../commit_message
           fi
       - name: Push changes
         working-directory: target_branch
