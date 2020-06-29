@@ -2,7 +2,7 @@ publish_mode: editorial_workflow
 backend:
   name: github
   repo: gorilych/blog
-  branch: gh-pages
+  branch: master
   base_url: https://3sljmhn0il.execute-api.us-east-1.amazonaws.com
   auth_endpoint: /prod/auth
 
