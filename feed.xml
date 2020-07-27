@@ -1,4 +1,63 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.1.1">Jekyll</generator><link href="https://blog.gorilych.ru/feed.xml" rel="self" type="application/atom+xml" /><link href="https://blog.gorilych.ru/" rel="alternate" type="text/html" /><updated>2020-06-29T11:57:36+00:00</updated><id>https://blog.gorilych.ru/feed.xml</id><title type="html">Blog</title><subtitle></subtitle><author><name>Andrey Kartashov</name><email>gorilych@gmail.com</email></author><entry><title type="html">Welcome to Jekyll!</title><link href="https://blog.gorilych.ru/jekyll/update/welcome-to-jekyll/" rel="alternate" type="text/html" title="Welcome to Jekyll!" /><published>2020-06-26T17:52:28+00:00</published><updated>2020-06-26T17:52:28+00:00</updated><id>https://blog.gorilych.ru/jekyll/update/welcome-to-jekyll</id><content type="html" xml:base="https://blog.gorilych.ru/jekyll/update/welcome-to-jekyll/">&lt;p&gt;You’ll find this post in your &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;_posts&lt;/code&gt; directory. Go ahead and edit it and re-build the site to see your changes. You can rebuild the site in many different ways, but the most common way is to run &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;jekyll serve&lt;/code&gt;, which launches a web server and auto-regenerates your site when a file is updated.&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.1.1">Jekyll</generator><link href="https://blog.gorilych.ru/feed.xml" rel="self" type="application/atom+xml" /><link href="https://blog.gorilych.ru/" rel="alternate" type="text/html" /><updated>2020-07-27T16:28:50+00:00</updated><id>https://blog.gorilych.ru/feed.xml</id><title type="html">Blog</title><subtitle></subtitle><author><name>Andrey Kartashov</name><email>gorilych@gmail.com</email></author><entry><title type="html">Pulumi for Terraform users</title><link href="https://blog.gorilych.ru/pulumi-for-tf-users/" rel="alternate" type="text/html" title="Pulumi for Terraform users" /><published>2020-07-25T17:52:28+00:00</published><updated>2020-07-25T17:52:28+00:00</updated><id>https://blog.gorilych.ru/pulumi-for-tf-users</id><content type="html" xml:base="https://blog.gorilych.ru/pulumi-for-tf-users/">&lt;p&gt;This article is intended for engineers familiar with IaC, modern IaC tools, and related terminology. As title suggests, it might be interesting for Terraform users - I’ll try to compare Terraform and Pulumi. The article is based on personal experience and may appear opinionated.&lt;/p&gt;
+
+&lt;h1 id=&quot;iac-approach&quot;&gt;IaC approach&lt;/h1&gt;
+
+&lt;figure&gt;
+  &lt;img src=&quot;https://blog.gorilych.ru/assets/pulumi-for-tf-users/iac.svg&quot; alt=&quot;&quot; object-fit=&quot;cover&quot; /&gt;
+  &lt;figcaption&gt;IaC workflow&lt;/figcaption&gt;
+&lt;/figure&gt;
+
+&lt;p&gt;I am sure Terraform users have correct understanding of what IaC is and is not, but for the sake of article consistency, let me repeat it here.&lt;/p&gt;
+
+&lt;p&gt;Infrastructure as Code aims to provide a reliable, repeatable, and automatic way to create, adjust, or destroy infrastructure components or resources. Usually these are networking, compute, or storage resources in public clouds like AWS.&lt;/p&gt;
+
+&lt;p&gt;The major concept and the main difference with manual administration is that you describe infrastructure in a declarative way. &lt;strong&gt;Code&lt;/strong&gt; part means that this description is machine-readable and a machine executes the code to operate infrastructure.&lt;/p&gt;
+
+&lt;p&gt;Another pillar in IaC is a concept of &lt;strong&gt;State&lt;/strong&gt;  - description of operated resources with their actual conditions and characteristics. A state can be either stored somewhere or calculated each time (in ansible, f.e.). IaC requires state in its workflow because it should work with the same set of resources during infrastructure lifetime.&lt;/p&gt;
+
+&lt;p&gt;Usually we use &lt;strong&gt;specific tool for IaC&lt;/strong&gt; (CloudFormation, Terraform, Pulumi, Ansible, etc). I would say it’s another concept behind IaC, implicit though. Of course, you can also manage resources programmatically with cloud API using regular scripts. But with these requirements of having state and describe infrastructure declaratively you’ll end up with writing your own IaC tool.&lt;/p&gt;
+
+&lt;p&gt;In short, IaC workflow is to write some code and use specific IaC tool to execute it, producing state and cloud resources as a result.&lt;/p&gt;
+
+&lt;h1 id=&quot;what-is-pulumi&quot;&gt;What is Pulumi&lt;/h1&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://www.pulumi.com/docs/&quot;&gt;Pulumi&lt;/a&gt; is a modern IaC tool that essentially differs from others by allowing the use of real programming languages. This doesn’t mean it uses an imperative approach though because a code describes a desired state and not API calls or procedures to perform.&lt;/p&gt;
+
+&lt;p&gt;Currently supported &lt;a href=&quot;https://www.pulumi.com/docs/intro/languages/&quot;&gt;language runtimes&lt;/a&gt; are Node.js, Python, .NET Core, and Go.&lt;/p&gt;
+
+&lt;p&gt;Let’s outline the main terms of Pulumi’s architecture (described in greater detail in &lt;a href=&quot;https://www.pulumi.com/docs/intro/concepts/&quot;&gt;Architecture &amp;amp; Concepts&lt;/a&gt;).&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.pulumi.com/docs/intro/concepts/project/&quot;&gt;Project&lt;/a&gt; - the code itself which describes cloud resources - directory containing collection of program files (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;*.go&lt;/code&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;*.ts&lt;/code&gt; etc) and a metadata file &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Pulumi.yaml&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.pulumi.com/docs/intro/concepts/stack/&quot;&gt;Stack&lt;/a&gt; - instance of a &lt;em&gt;Project&lt;/em&gt;, collection of cloud resources deployed with particular &lt;em&gt;Configuration&lt;/em&gt; (see below). F.e., you may have separate stacks for production and staging environments.&lt;/li&gt;
+  &lt;li&gt;&lt;em&gt;Stack&lt;/em&gt; &lt;a href=&quot;https://www.pulumi.com/docs/intro/concepts/config/&quot;&gt;Configuration&lt;/a&gt; - YAML file with a set of values which are used to modify operation flow. This adds flexibility so you can re-use the same &lt;em&gt;Project&lt;/em&gt; for environments with distinct DNS names, different compute power and storage capacity and so on. Configuration file is named after a &lt;em&gt;Stack&lt;/em&gt; as &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Pulumi.&amp;lt;stack-name&amp;gt;.yaml&lt;/code&gt;.&lt;/li&gt;
+  &lt;li&gt;&lt;em&gt;Stack&lt;/em&gt; &lt;a href=&quot;https://www.pulumi.com/docs/intro/concepts/state/&quot;&gt;State&lt;/a&gt; - state of cloud resources in a &lt;em&gt;Stack&lt;/em&gt;.&lt;/li&gt;
+  &lt;li&gt;&lt;em&gt;Stack&lt;/em&gt; &lt;a href=&quot;https://www.pulumi.com/docs/intro/concepts/programming-model/#stack-outputs&quot;&gt;Output&lt;/a&gt; - calculated values which are known after deployment, f.e. EC2 instance id, generated password for RDS, etc&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;These terms are close but not always interchangeable with Terraform ones. Pulumi’s project is close to Terraform’s root module. Terraform’s workspace is a close concept for Pulumi’s stack. Output and configuration can be considered the same.&lt;/p&gt;
+
+&lt;p&gt;Likewise in Terraform, there is a specific binary &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;pulumi&lt;/code&gt; to execute Pulumi programs. &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;pulumi&lt;/code&gt; is used to operate state backends (a place where state files are stored) and stacks.&lt;/p&gt;
+
+&lt;h1 id=&quot;how-pulumi-works&quot;&gt;How Pulumi works&lt;/h1&gt;
+
+&lt;p&gt;When you run a pulumi program it is executed with &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;pulumi&lt;/code&gt; binary. Pulumi engine computes a desired state from resources registered by the program and then creates, updates, or deletes resources as needed.&lt;/p&gt;
+
+&lt;p&gt;Pulumi consists of a language host that is responsible for executing the code and deployment engine which is responsible for interacting with cloud API.&lt;/p&gt;
+
+&lt;p&gt;For the greater details refer to these articles:&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.pulumi.com/docs/intro/concepts/how-pulumi-works/&quot;&gt;https://www.pulumi.com/docs/intro/concepts/how-pulumi-works/&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.pulumi.com/docs/intro/concepts/programming-model/&quot;&gt;https://www.pulumi.com/docs/intro/concepts/programming-model/&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h1 id=&quot;programming-model&quot;&gt;Programming model&lt;/h1&gt;
+&lt;h1 id=&quot;code-example&quot;&gt;Code example&lt;/h1&gt;
+&lt;h1 id=&quot;code-reuse&quot;&gt;Code reuse&lt;/h1&gt;
+&lt;h1 id=&quot;cli-usage&quot;&gt;CLI usage&lt;/h1&gt;
+&lt;h1 id=&quot;pulumi-vs-terraform&quot;&gt;Pulumi vs Terraform&lt;/h1&gt;
+&lt;h1 id=&quot;conclusion&quot;&gt;Conclusion&lt;/h1&gt;
+&lt;h1 id=&quot;references&quot;&gt;References&lt;/h1&gt;</content><author><name>Andrey Kartashov</name><email>gorilych@gmail.com</email></author><category term="pulumi" /><category term="terraform" /><summary type="html">This article is intended for engineers familiar with IaC, modern IaC tools, and related terminology. As title suggests, it might be interesting for Terraform users - I’ll try to compare Terraform and Pulumi. The article is based on personal experience and may appear opinionated.</summary></entry><entry><title type="html">Welcome to Jekyll!</title><link href="https://blog.gorilych.ru/jekyll/update/welcome-to-jekyll/" rel="alternate" type="text/html" title="Welcome to Jekyll!" /><published>2020-06-26T17:52:28+00:00</published><updated>2020-06-26T17:52:28+00:00</updated><id>https://blog.gorilych.ru/jekyll/update/welcome-to-jekyll</id><content type="html" xml:base="https://blog.gorilych.ru/jekyll/update/welcome-to-jekyll/">&lt;p&gt;You’ll find this post in your &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;_posts&lt;/code&gt; directory. Go ahead and edit it and re-build the site to see your changes. You can rebuild the site in many different ways, but the most common way is to run &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;jekyll serve&lt;/code&gt;, which launches a web server and auto-regenerates your site when a file is updated.&lt;/p&gt;
 
 &lt;p&gt;To add new posts, simply add a file in the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;_posts&lt;/code&gt; directory that follows the convention &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;YYYY-MM-DD-name-of-post.ext&lt;/code&gt; and includes the necessary front matter. Take a look at the source for this post to get an idea about how it works.&lt;/p&gt;
 
